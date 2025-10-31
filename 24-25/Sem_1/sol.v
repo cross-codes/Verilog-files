@@ -148,57 +148,25 @@ module TESTBENCH();
   reg X, RST, CLK;
   wire Z1, Z2;
 
-  INTG arch(Z1, Z2, X, RST, CLK);
+  wire [0:24] seq;
+  assign seq = 25'b1001_0011_0010_0001_0010_0100_1;
 
-  initial begin
-    CLK = 1;
-  end
+  INTG dut(Z1, Z2, X, RST, CLK);
 
   always begin
     #5 CLK = ~CLK;
   end
 
-  integer i = 0;
-
-  always begin
-    #10 i = i + 1;
-  end
-
+  integer i;
   initial begin
-    RST = 1'b1;
-    X = 1'b0;
+    #0 RST = 1'b1; CLK = 1'b1;
+    #11 RST = 1'b0;
 
-    #10 RST = 0;
-    X = 1;
+    for (i = 0; i < 25; i = i + 1) begin
+      @(negedge CLK) X = seq[i];
+      @(posedge CLK) #1 $display($time, " X: %b, Z1: %b, Z2: %b", X, Z1, Z2);
+    end
 
-    #10 X = 0;
-    #10 X = 0;
-    #10 X = 1;
-    #10 X = 0;
-    #10 X = 0;
-    #10 X = 1;
-    #10 X = 1;
-    #10 X = 0;
-    #10 X = 0;
-    #10 X = 1;
-    #10 X = 0;
-    #10 X = 0;
-    #10 X = 0;
-    #10 X = 0;
-    #10 X = 1;
-    #10 X = 0;
-    #10 X = 0;
-    #10 X = 1;
-    #10 X = 0;
-    #10 X = 0;
-    #10 X = 1;
-    #10 X = 0;
-    #10 X = 0;
-    #10 X = 1;
-    #10 $finish;
-  end
-
-  initial begin
-    $monitor("Cycle#: %0d, time: %t, X: %b, Z1: %b, Z2: %b", i, $time, X, Z1, Z2);
+    #300 $finish;
   end
 endmodule
