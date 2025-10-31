@@ -108,7 +108,7 @@ module ENCRYPT(
 );
   wire [7:0] num_out, key_out;
   REG_8BIT reg1(num_out, number, clock, reset);
-  REG_8BIT reg2(key_out, number, clock, reset);
+  REG_8BIT reg2(key_out, key, clock, reset);
 
   wire [7:0] box_out;
   EXPANSION_BOX box(num_out[3:0], box_out);
