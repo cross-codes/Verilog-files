@@ -111,7 +111,7 @@ endmodule
 module TESTBENCH();
   wire [7:0] O;
   reg CLK;
-  reg [7:0] D;
+  reg [0:7] D;
 
   INTG dut(O, CLK, D);
 
